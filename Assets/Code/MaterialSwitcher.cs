@@ -22,6 +22,7 @@ public class MaterialSwitcher : MonoBehaviour
 
     private void SwitchMaterial()
     {
+        _materialToApply.name = _materialToApply.name;
         GetComponent<MeshRenderer>().material = _materialToApply;
     }
 }

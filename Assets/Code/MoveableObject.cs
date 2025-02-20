@@ -7,17 +7,23 @@ public class MoveableObject : MonoBehaviour
     [SerializeField] private LayerMask _layerMask;
     [SerializeField] private RecordedMovementsController _recordedMovementsController;
     private Collider _collider;
-    private Rigidbody _rb;   
+    private Rigidbody _rb;
     private void OnEnable()
     {
         _collider = GetComponent<Collider>();
         _rb = GetComponent<Rigidbody>();
-        _recordedMovementsController.OnPlayRecording += () => SetColliderTrigger(true);
+        if (_recordedMovementsController != null)
+        {
+            _recordedMovementsController.OnPlayRecording += () => SetColliderTrigger(true);
+        }
     }
 
     private void OnDisable()
     {
-        _recordedMovementsController.OnPlayRecording -= () => SetColliderTrigger(false);
+        if (_recordedMovementsController != null)
+        {
+            _recordedMovementsController.OnPlayRecording -= () => SetColliderTrigger(false);
+        }
     }
 
     private void SetColliderTrigger(bool val)

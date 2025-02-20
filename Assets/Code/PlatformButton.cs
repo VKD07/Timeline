@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlatformButton : MonoBehaviour
 {
-    [SerializeField] private Animator _movingPlatformAnim;
+    [SerializeField] private Animator[] _movingPlatformAnims;
     [SerializeField] private RecordedMovementsController _recordedMovements;
 
     private Transform _detectedObj;
@@ -21,12 +21,18 @@ public class PlatformButton : MonoBehaviour
 
     private void Activate()
     {
-        _movingPlatformAnim?.SetBool("Activate", true);
+        for (int i = 0; i < _movingPlatformAnims.Length; i++)
+        {
+            _movingPlatformAnims[i]?.SetBool("Activate", true);
+        }
     }
 
     private void Deactivate()
     {
-        _movingPlatformAnim?.SetBool("Activate", false);
+        for (int i = 0; i < _movingPlatformAnims.Length; i++)
+        {
+            _movingPlatformAnims[i]?.SetBool("Activate", false);
+        }
         _detectedObj = null;
     }
 
@@ -46,7 +52,7 @@ public class PlatformButton : MonoBehaviour
     {
         if (other.TryGetComponent<MeshRenderer>(out MeshRenderer renderer))
         {
-            if (renderer.material.name == GetComponent<MeshRenderer>().material.name)
+            if (renderer.material.name == GetComponent<MeshRenderer>().material.name || renderer.material.name == $"{GetComponent<MeshRenderer>().material.name} (Instance)")
             {
                 Deactivate();
             }

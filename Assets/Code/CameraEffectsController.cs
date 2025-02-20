@@ -12,12 +12,12 @@ public class CameraEffectsController : MonoBehaviour
 
     private void OnEnable()
     {
-        _recordedMovement.OnPlayFinished += () => { SetColorGrading(true); SetCameraBackgroundColor(_backgroundColor); };
+        _recordedMovement.OnPlayFinished += () => { SetColorGrading(true); SetCameraBackgroundColor(_backgroundColor); SwitchCullingToFuture(); };
     }
 
     private void OnDisable()
     {
-        _recordedMovement.OnPlayFinished += () => { SetColorGrading(false); SetCameraBackgroundColor(_backgroundColor); };
+        _recordedMovement.OnPlayFinished += () => { SetColorGrading(false); SetCameraBackgroundColor(_backgroundColor); SwitchCullingToFuture(); };
     }
 
     private void Start()
@@ -25,8 +25,6 @@ public class CameraEffectsController : MonoBehaviour
         _camera = GetComponent<Camera>();
         _additionalCameraData = _camera.GetComponent<HDAdditionalCameraData>();
     }
-
-
 
 
     public void SetColorGrading(bool val)
@@ -43,5 +41,14 @@ public class CameraEffectsController : MonoBehaviour
     {
         _additionalCameraData.clearColorMode = HDAdditionalCameraData.ClearColorMode.Color;
         _additionalCameraData.backgroundColorHDR = _backgroundColor;
+    }
+
+    public void SwitchCullingToFuture()
+    {
+        int pastLayer = LayerMask.NameToLayer("Past");
+        int futureLayer = LayerMask.NameToLayer("Future");
+
+        _camera.cullingMask &= ~(1 << pastLayer);
+        _camera.cullingMask |= (1 << futureLayer);
     }
 }
