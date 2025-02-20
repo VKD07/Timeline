@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class RecordedMovementsController : MonoBehaviour
 {
@@ -11,13 +12,15 @@ public class RecordedMovementsController : MonoBehaviour
     [SerializeField] private KeyCode playKey = KeyCode.P, stopKey = KeyCode.T, recordKey = KeyCode.R;
     [SerializeField] private TextMeshProUGUI recordingStatus;
 
+    private bool _hasUsedRecording;
+
     public Action OnPlayRecording;
     public Action OnPlayFinished;
 
 
     private void Update()
     {
-        if (Input.GetKeyDown(recordKey))
+        if (Input.GetKeyDown(recordKey) && !_hasUsedRecording)
         {
             for (int i = 0; i < _recordedMovements.Length; i++)
             {
@@ -25,6 +28,7 @@ public class RecordedMovementsController : MonoBehaviour
                 Debug.Log($"[{_recordedMovements[i].name}], has started recording...");
                 recordingStatus.text = "Recording...";
             }
+      
         }
         else if (Input.GetKeyDown(stopKey))
         {
@@ -67,6 +71,7 @@ public class RecordedMovementsController : MonoBehaviour
         {
             _recordedMovements[i].Reset();
         }
+
         OnPlayFinished?.Invoke();
     }
 }

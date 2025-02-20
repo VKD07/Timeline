@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlatformButton : MonoBehaviour
@@ -6,24 +7,26 @@ public class PlatformButton : MonoBehaviour
     [SerializeField] private RecordedMovementsController _recordedMovements;
 
     private Transform _detectedObj;
-  
+
 
     private void Update()
     {
-        if(_detectedObj == null)
+        if (_detectedObj == null)
         {
             Deactivate();
         }
     }
 
+
+
     private void Activate()
     {
-        _movingPlatformAnim.SetBool("Activate", true);
+        _movingPlatformAnim?.SetBool("Activate", true);
     }
 
     private void Deactivate()
     {
-        _movingPlatformAnim.SetBool("Activate", false);
+        _movingPlatformAnim?.SetBool("Activate", false);
         _detectedObj = null;
     }
 
@@ -49,6 +52,4 @@ public class PlatformButton : MonoBehaviour
             }
         }
     }
-
-    
 }
