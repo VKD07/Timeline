@@ -3,17 +3,17 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class RecordedMovementsController : MonoBehaviour
 {
     [SerializeField] private MovementRecording[] _recordedMovements;
     [SerializeField] private RecordingPath _recordingPath;
     [SerializeField] private FutureUIMask _futureUIMask;
-    [SerializeField] private KeyCode playKey = KeyCode.P, stopKey = KeyCode.T, recordKey = KeyCode.R;
-    [SerializeField] private TextMeshProUGUI recordingStatus;
-
+    [SerializeField] private KeyCode playKey = KeyCode.P, stopKey = KeyCode.T, recordKey = KeyCode.R, restartKey = KeyCode.O;
+    [SerializeField] private PlayerCircleUIEffect _playerCircleEffect;
     private bool _hasUsedRecording;
-
+    private bool _hasPlayedRecording;
     public Action OnPlayRecording;
     public Action OnPlayFinished;
 
@@ -22,34 +22,36 @@ public class RecordedMovementsController : MonoBehaviour
     {
         if (Input.GetKeyDown(recordKey) && !_hasUsedRecording)
         {
+            _playerCircleEffect.SetActiveRecordingEffect(true);
+            _hasUsedRecording = true;
             for (int i = 0; i < _recordedMovements.Length; i++)
             {
                 _recordedMovements[i].Record();
                 Debug.Log($"[{_recordedMovements[i].name}], has started recording...");
-                recordingStatus.text = "Recording...";
             }
-      
+
         }
-        else if (Input.GetKeyDown(stopKey))
+        else if (Input.GetKeyDown(stopKey) && _hasUsedRecording)
         {
+            _playerCircleEffect.SetActiveRecordingEffect(false);
             for (int i = 0; i < _recordedMovements.Length; i++)
             {
                 _recordedMovements[i].Stop();
                 Debug.Log($"[{_recordedMovements[i].name}], has stopped recording...");
-                recordingStatus.text = "Recording Stopped...";
             }
         }
-        else if (Input.GetKeyDown(playKey))
+        else if (Input.GetKeyDown(playKey) && _hasUsedRecording && !_hasPlayedRecording)
         {
-            if(_recordedMovements.Length <= 0)
+            _hasPlayedRecording = true;
+            if (_recordedMovements.Length <= 0)
             {
                 return;
             }
 
+            _playerCircleEffect.ActivateOuterCircleEffect(_recordedMovements[0].TotalTime);
             _recordingPath.CreateRecordingPath();
             _futureUIMask.ExpandToMaxRadius();
             OnPlayRecording?.Invoke();
-            recordingStatus.text = "Recording Playing...";
 
             for (int i = 0; i < _recordedMovements.Length; i++)
             {
@@ -58,6 +60,13 @@ public class RecordedMovementsController : MonoBehaviour
             }
             StartCoroutine(FutureDuration());
         }
+
+        if (Input.GetKeyDown(restartKey))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            TransitionUIController.instance.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+        }
+
     }
 
     private IEnumerator FutureDuration()

@@ -6,6 +6,10 @@ public class Goal : MonoBehaviour
 {
     [SerializeField] private GameObject _visual;
     [SerializeField] private ParticleSystem _vfx;
+    [SerializeField] private Animator _anim;
+    [SerializeField] private GameObject _winPanel;
+
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent<PlayerMovement>(out PlayerMovement player))
@@ -19,7 +23,21 @@ public class Goal : MonoBehaviour
     {
         _vfx.Play();
         _visual.SetActive(false);
-        yield return new WaitForSeconds(2);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        _anim.SetTrigger("Activate");
+        
+        if(SceneManager.GetActiveScene().buildIndex == 8) //TODO CHANGE
+        {
+            _winPanel.SetActive(true);
+        }
+        else
+        {
+            yield return new WaitForSeconds(1);
+            TransitionUIController.instance.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
+        }
+    }
+
+    public void QuitGame()
+    {
+        SceneManager.LoadScene(0);
     }
 }

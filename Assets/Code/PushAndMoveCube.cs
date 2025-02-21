@@ -17,20 +17,26 @@ public class PushAndMoveCube : MonoBehaviour
     private void OnEnable()
     {
         _move.OnMove += PushObject;
-        _recordedMovementsController.OnPlayRecording += () => SetAllowedToPush(false);
-        _recordedMovementsController.OnPlayFinished += () => SetAllowedToPush(true);
+        if (_recordedMovementsController != null)
+        {
+            _recordedMovementsController.OnPlayRecording += () => SetAllowedToPush(false);
+            _recordedMovementsController.OnPlayFinished += () => SetAllowedToPush(true);
+        }
     }
 
     private void OnDisable()
     {
         _move.OnMove -= PushObject;
-        _recordedMovementsController.OnPlayRecording -= () => SetAllowedToPush(false);
-        _recordedMovementsController.OnPlayFinished -= () => SetAllowedToPush(true);
+        if (_recordedMovementsController != null)
+        {
+            _recordedMovementsController.OnPlayRecording -= () => SetAllowedToPush(false);
+            _recordedMovementsController.OnPlayFinished -= () => SetAllowedToPush(true);
+        }
     }
 
     private void PushObject(Vector3 direction)
     {
-        if(!_isAllowedToPush)
+        if (!_isAllowedToPush)
         {
             return;
         }

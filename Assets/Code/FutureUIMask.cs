@@ -19,16 +19,6 @@ public class FutureUIMask : MonoBehaviour
         _rect.sizeDelta = Vector2.one * (initialRadius * 2f);
     }
 
-    private void Update()
-    {
-        if (Input.GetKey(KeyCode.L))
-            //AdjustCircleMaskSize(radiusChangeSpeed * Time.deltaTime);
-            ExpandToMaxRadius();
-        if (Input.GetKey(KeyCode.K))
-            ContractToMinRadius();
-            //AdjustCircleMaskSize(-radiusChangeSpeed * Time.deltaTime);
-    }
-
     public void ExpandToMaxRadius()
     {
         if (_currentCoroutine != null)
