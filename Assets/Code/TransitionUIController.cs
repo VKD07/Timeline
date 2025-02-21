@@ -70,7 +70,8 @@ public class TransitionUIController : MonoBehaviour
 
     private IEnumerator LoadSceneRoutine(int buildIndex)
     {
-        SetActiveTransitionImage(true); 
+        SetActiveTransitionImage(true);
+        AudioManager.Instance.PlaySound("Whoosh");
         yield return new WaitForSeconds(duration);
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(buildIndex);
         asyncLoad.allowSceneActivation = false;
@@ -79,6 +80,7 @@ public class TransitionUIController : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         asyncLoad.allowSceneActivation = true;
         yield return new WaitUntil(() => asyncLoad.isDone);
+        AudioManager.Instance.PlaySound("Whoosh");
         SetActiveTransitionImage(false);
     }
 }

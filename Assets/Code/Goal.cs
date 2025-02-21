@@ -24,6 +24,7 @@ public class Goal : MonoBehaviour
         _vfx.Play();
         _visual.SetActive(false);
         _anim.SetTrigger("Activate");
+        AudioManager.Instance.PlaySound("GoalReachedSfx");
         
         if(SceneManager.GetActiveScene().buildIndex == 8) //TODO CHANGE
         {

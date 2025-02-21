@@ -76,6 +76,8 @@ public class PlayerMovement : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
         }
 
+        AudioManager.Instance?.PlaySound("MoveSound");
+
         if (_movementRecording.IsRecording)
         {
             OnSuccessfulRoll?.Invoke(transform.localPosition);
