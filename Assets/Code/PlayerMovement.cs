@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 using NUnit.Framework.Interfaces;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -43,6 +44,11 @@ public class PlayerMovement : MonoBehaviour
         else if (Input.GetKey(KeyCode.D)) Assemble(Vector3.back);
         else if (Input.GetKey(KeyCode.W)) Assemble(Vector3.right);
         else if (Input.GetKey(KeyCode.S)) Assemble(Vector3.left);
+
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 
 

@@ -6,6 +6,7 @@ public class MoveableObject : MonoBehaviour
     [SerializeField] private float _moveSpeed = 2f;
     [SerializeField] private LayerMask _layerMask;
     [SerializeField] private RecordedMovementsController _recordedMovementsController;
+    [SerializeField] private bool _enableTriggerOnPlayRecord = true;
     private Collider _collider;
     private Rigidbody _rb;
     private void OnEnable()
@@ -15,6 +16,7 @@ public class MoveableObject : MonoBehaviour
         if (_recordedMovementsController != null)
         {
             _recordedMovementsController.OnPlayRecording += () => SetColliderTrigger(true);
+            _recordedMovementsController.OnPlayFinished += ResetLayerToDefault;
         }
     }
 
@@ -23,13 +25,24 @@ public class MoveableObject : MonoBehaviour
         if (_recordedMovementsController != null)
         {
             _recordedMovementsController.OnPlayRecording -= () => SetColliderTrigger(false);
+            _recordedMovementsController.OnPlayFinished -= ResetLayerToDefault;
         }
     }
 
     private void SetColliderTrigger(bool val)
     {
+        if (!_enableTriggerOnPlayRecord)
+        {
+            gameObject.layer = LayerMask.NameToLayer("Ground");
+            return;
+        }
         _rb.useGravity = !val;
         _collider.isTrigger = val;
+    }
+
+    private void ResetLayerToDefault()
+    {
+        gameObject.layer = LayerMask.NameToLayer("Default");
     }
 
 
